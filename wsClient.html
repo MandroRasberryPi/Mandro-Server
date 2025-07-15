@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dual Camera Stream</title>
+</head>
+<body style="display:flex; flex-direction:row; background:black; height:100vh; align-items:center; justify-content:center; gap:20px;">
+    <h1 style="color:aliceblue">왼쪽</h1>
+    <img id="cam1" style="border:4px solid white; width:48%; border-radius:10px;">
+    <h1 style="color:aliceblue">오른쪽</h1>
+  <img id="cam0" style="border:4px solid white; width:48%; border-radius:10px;">
+  <script>
+    function connectCamera(wsPath, imgId) {
+      const img = document.getElementById(imgId);
+      const ws = new WebSocket("ws://" + location.host + wsPath);
+      ws.onmessage = (event) => {
+        img.src = "data:image/jpeg;base64," + event.data;
+      };
+      ws.onopen = () => console.log(` ${wsPath} 연결됨`);
+      ws.onclose = () => console.log(` ${wsPath} 연결 끊김`);
+    }
+
+    connectCamera("/ws0", "cam0");
+    connectCamera("/ws1", "cam1");
+  </script>
+</body>
+</html>
