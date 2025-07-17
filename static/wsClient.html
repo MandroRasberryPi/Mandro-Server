@@ -1,13 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>Dual Camera Stream</title>
+  <meta charset="UTF-8" />
+  <title>Dual Camera Stream </title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .camera-container {
+      position: relative;
+      width: 48vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .camera-label {
+      position: absolute;
+      top: 10px;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      z-index: 10;
+    }
+
+    .rotated-video {
+      width: auto;
+      height: 100vh;
+      transform-origin: center center;
+      object-fit: cover;
+      transform: rotate(270deg); 
+      border: 4px solid white;
+      border-radius: 10px;
+    }
+
+    #cam0 {
+      transform: rotate(-270deg);
+    }
+  </style>
 </head>
-<body style="display:flex; flex-direction:row; background:black; height:100vh; align-items:center; justify-content:center; gap:20px;">
-    <h1 style="color:aliceblue">왼쪽</h1>
-    <img id="cam1" style="border:4px solid white; width:48%; border-radius:10px;">
-    <h1 style="color:aliceblue">오른쪽</h1>
-  <img id="cam0" style="border:4px solid white; width:48%; border-radius:10px;">
+<body>
+  <div class="camera-container">
+    <div class="camera-label">왼쪽</div>
+    <img id="cam1" class="rotated-video" alt="cam1" />
+  </div>
+  <div class="camera-container">
+    <div class="camera-label">오른쪽</div>
+    <img id="cam0" class="rotated-video" alt="cam0" />
+  </div>
+
   <script>
     function connectCamera(wsPath, imgId) {
       const img = document.getElementById(imgId);
