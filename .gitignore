@@ -1,0 +1,54 @@
+# 가상환경
+venv/
+.env
+.env.*
+
+# Python 기본
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# 로그 파일
+*.log
+
+# IDE 관련
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+
+# Test/coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# Uvicorn PID or temp files
+*.pid
+*.db
+*.sqlite3
+
+# Migrations (만약 Alembic 등 쓸 경우)
+migrations/
+alembic.ini
+
+# __test__ artifacts
+test_results/
+tests/__pycache__/
+
+# Node/npm (혹시 프론트랑 같이 있을 경우)
+node_modules/
+dist/
+build/
+
+# 기타 사용자 지정 파일
+*.bak
+*.swp
