@@ -13,6 +13,6 @@ async def stream_camera(websocket: WebSocket, cam):
             _, jpeg = cv2.imencode(".jpg", frame)
             data = base64.b64encode(jpeg).decode("utf-8")
             await websocket.send_text(data)
-            await asyncio.sleep(1 / 30)
+            await asyncio.sleep(1 / 60)
     except WebSocketDisconnect:
         pass
