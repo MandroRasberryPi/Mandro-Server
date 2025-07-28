@@ -54,7 +54,6 @@
     const cam1 = document.getElementById("cam1");
     const app = document.getElementById("app");
 
-    // 방향 감지해서 가로/세로 레이아웃 전환
     const checkOrientation = () => {
       const isLandscape = window.innerWidth > window.innerHeight;
       app.classList.toggle("vertical", !isLandscape);
@@ -65,9 +64,8 @@
     window.addEventListener("resize", checkOrientation);
     checkOrientation();
 
-    // WebSocket 연결
-    const ws0 = new WebSocket(`ws://${location.host}/ws0`);
-    const ws1 = new WebSocket(`ws://${location.host}/ws1`);
+    const ws0 = new WebSocket(`wss://${location.host}/ws0`);
+    const ws1 = new WebSocket(`wss://${location.host}/ws1`);
 
     ws0.onmessage = (event) => {
       cam0.src = "data:image/jpeg;base64," + event.data;
