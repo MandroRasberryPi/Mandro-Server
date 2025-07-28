@@ -2,79 +2,83 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Dual Camera Stream </title>
+  <title>Dual Camera Stream</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
       margin: 0;
       padding: 0;
       background: black;
-      overflow: hidden;
+      color: white;
       height: 100vh;
       width: 100vw;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-    }
-
-    .camera-container {
-      position: relative;
-      width: 48vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .camera-label {
-      position: absolute;
-      top: 10px;
-      color: white;
-      font-size: 2rem;
-      font-weight: bold;
-      z-index: 10;
+    .container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
     }
 
-    .rotated-video {
-      width: auto;
-      height: 100vh;
-      transform-origin: center center;
-      object-fit: cover;
-      transform: rotate(270deg); 
-      border: 4px solid white;
-      border-radius: 10px;
+    .vertical {
+      flex-direction: column;
     }
 
-    #cam0 {
-      transform: rotate(-270deg);
+    .camera {
+      object-fit: contain;
+      max-width: 48vw;
+      max-height: 100vh;
+      border-radius: 8px;
+    }
+
+    .rotated {
+      transform: rotate(90deg);
     }
   </style>
 </head>
 <body>
-  <div class="camera-container">
-    <div class="camera-label">왼쪽</div>
-    <img id="cam1" class="rotated-video" alt="cam1" />
-  </div>
-  <div class="camera-container">
-    <div class="camera-label">오른쪽</div>
-    <img id="cam0" class="rotated-video" alt="cam0" />
+  <div id="app" class="container">
+    <img id="cam0" alt="Camera 0" class="camera" />
+    <img id="cam1" alt="Camera 1" class="camera" />
   </div>
 
   <script>
-    function connectCamera(wsPath, imgId) {
-      const img = document.getElementById(imgId);
-      const ws = new WebSocket("ws://" + location.host + wsPath);
-      ws.onmessage = (event) => {
-        img.src = "data:image/jpeg;base64," + event.data;
-      };
-      ws.onopen = () => console.log(` ${wsPath} 연결됨`);
-      ws.onclose = () => console.log(` ${wsPath} 연결 끊김`);
-    }
+    const cam0 = document.getElementById("cam0");
+    const cam1 = document.getElementById("cam1");
+    const app = document.getElementById("app");
 
-    connectCamera("/ws0", "cam0");
-    connectCamera("/ws1", "cam1");
+    // 방향 감지해서 가로/세로 레이아웃 전환
+    const checkOrientation = () => {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      app.classList.toggle("vertical", !isLandscape);
+      cam0.classList.toggle("rotated", !isLandscape);
+      cam1.classList.toggle("rotated", !isLandscape);
+    };
+
+    window.addEventListener("resize", checkOrientation);
+    checkOrientation();
+
+    // WebSocket 연결
+    const ws0 = new WebSocket(`ws://${location.host}/ws0`);
+    const ws1 = new WebSocket(`ws://${location.host}/ws1`);
+
+    ws0.onmessage = (event) => {
+      cam0.src = "data:image/jpeg;base64," + event.data;
+    };
+
+    ws1.onmessage = (event) => {
+      cam1.src = "data:image/jpeg;base64," + event.data;
+    };
+
+    ws0.onopen = () => console.log("ws0 connected");
+    ws1.onopen = () => console.log("ws1 connected");
   </script>
 </body>
 </html>
