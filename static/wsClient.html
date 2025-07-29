@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Dual Camera Stream</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
@@ -77,6 +76,19 @@
 
     ws0.onopen = () => console.log("ws0 connected");
     ws1.onopen = () => console.log("ws1 connected");
+
+    function goFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { 
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { 
+        elem.msRequestFullscreen();
+      }
+    }
+
+    document.body.addEventListener("click", goFullscreen, { once: true });
   </script>
 </body>
 </html>
