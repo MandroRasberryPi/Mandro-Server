@@ -98,13 +98,9 @@
 
         const left = config.left || 0;
         const right = config.right || 0;
-        const distorted = parseFloat(config.distorted || "0");
 
         cam0.style.transform = `translateX(${left}px)`;
         cam1.style.transform = `translateX(${right}px)`;
-
-        cam0.style.filter = `blur(${distorted * 10}px)`;
-        cam1.style.filter = `blur(${distorted * 10}px)`;
 
         console.log("[CONFIG APPLIED]", config);
       } catch (e) {

@@ -24,10 +24,9 @@ async def websocket_cam1(websocket: WebSocket):
 async def update_values(
     left: int = Form(...),
     right: int = Form(...),
-    distorted: str = Form(...)
 ):
     try:
-        update_camera_state(left, right, distorted)
+        update_camera_state(left, right)
         return {"message": "Values updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -35,7 +34,6 @@ async def update_values(
 @app.get("/config")
 async def get_config():
     state = get_camera_state()
-    state["distorted"] = str(state["distorted"])  
     return state
 
 app.add_middleware(
