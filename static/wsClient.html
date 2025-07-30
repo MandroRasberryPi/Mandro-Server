@@ -35,6 +35,7 @@
       max-width: 48vw;
       max-height: 100vh;
       border-radius: 8px;
+      transition: all 0.3s ease;
     }
 
     .rotated {
@@ -81,14 +82,37 @@
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) { 
+      } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) { 
+      } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
       }
     }
 
     document.body.addEventListener("click", goFullscreen, { once: true });
+
+    async function fetchAndApplyConfig() {
+      try {
+        const res = await fetch("/config");
+        const config = await res.json();
+
+        const left = config.left || 0;
+        const right = config.right || 0;
+        const distorted = parseFloat(config.distorted || "0");
+
+        cam0.style.transform = `translateX(${left}px)`;
+        cam1.style.transform = `translateX(${right}px)`;
+
+        cam0.style.filter = `blur(${distorted * 10}px)`;
+        cam1.style.filter = `blur(${distorted * 10}px)`;
+
+        console.log("[CONFIG APPLIED]", config);
+      } catch (e) {
+        console.error("Failed to fetch /config", e);
+      }
+    }
+
+    fetchAndApplyConfig();
   </script>
 </body>
 </html>
