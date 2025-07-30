@@ -1,9 +1,10 @@
-from fastapi import FastAPI, WebSocket,Form
+from fastapi import FastAPI, WebSocket, Form, HTTPException
+from fastapi.responses import JSONResponse
 from routes.index import get_index_page
 from websocket.endpoints import stream_camera
 from camera.cameraManager import picam0, picam1
+from camera.cameraState import update_camera_state, get_camera_state
 from fastapi.middleware.cors import CORSMiddleware
-from camera.cameraState import update_camera_state
 
 app = FastAPI()
 
@@ -26,15 +27,20 @@ async def update_values(
     distorted: str = Form(...)
 ):
     try:
-        update_camera_state(left, right, distorted) 
+        update_camera_state(left, right, distorted)
         return {"message": "Values updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.get("/config")
+async def get_config():
+    state = get_camera_state()
+    state["distorted"] = str(state["distorted"])  
+    return state
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
